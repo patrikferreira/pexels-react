@@ -1,17 +1,28 @@
-"use client"
+"use client";
+
+import { useState } from "react";
 import { AiOutlinePicture } from "react-icons/ai";
-import { MdKeyboardArrowDown } from "react-icons/md";
+import { IoIosArrowDown } from "react-icons/io";
+import { MdOutlineOndemandVideo } from "react-icons/md";
 
-type Props = {
-    option: string;
-}
+export default function Select() {
+  const [selectOption, setSelectOption] = useState("Photos");
 
-export default function Select({ option  }: Props) {
-    return <div className="bg-background p-3 rounded-2xl flex items-center justify-between gap-1 cursor-pointer">
-        <AiOutlinePicture className="text-lg text-secondColor" />
+  const options = [
+    { value: "Photos", label: "Photos", icon: <AiOutlinePicture /> },
+    { value: "Videos", label: "Videos", icon: <MdOutlineOndemandVideo /> },
+  ];
+  return (
+    <div className="flex items-center gap-2 bg-background p-3 min-h-full rounded-xl cursor-pointer ">
+      <div className="flex items-center gap-2">
+        <span className="text-secondColor">
+          {options.find((option) => option.value === selectOption)?.icon}
+        </span>
         <p className="font-semibold text-sm">
-            {option}
+          {options.find((option) => option.value === selectOption)?.value}
         </p>
-        <MdKeyboardArrowDown className="text-secondColor" />
+      </div>
+      <IoIosArrowDown className="text-secondColor" />
     </div>
+  );
 }
