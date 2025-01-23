@@ -6,8 +6,12 @@ import { IoIosArrowDown } from "react-icons/io";
 import { MdOutlineOndemandVideo } from "react-icons/md";
 import Popover from "./Popover";
 
-export default function Select() {
-  const [selectOption, setSelectOption] = useState<string>("Photos");
+type Props = {
+  value: string;
+  onChange: (value: string) => void;
+}
+
+export default function Select({ value, onChange }: Props) {
   const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
 
   const options = [
@@ -15,20 +19,20 @@ export default function Select() {
     { value: "Videos", label: "Videos", icon: <MdOutlineOndemandVideo /> },
   ];
 
-  const handleOptionClick = (value: string) => {
-    setSelectOption(value);
+  function handleOptionClick(value: string) {
+    onChange(value);
     setIsPopoverOpen(false);
   };
 
   return (
     <div className="relative">
-      <div className="flex items-center gap-2 bg-background p-3 min-h-full rounded-xl cursor-pointer " onClick={() => setIsPopoverOpen((prev => !prev))}>
+      <div className="flex items-center gap-2 bg-background p-3 min-h-full rounded-xl cursor-pointer w-26" onClick={() => setIsPopoverOpen((prev => !prev))}>
         <div className="flex items-center gap-2">
           <span className="text-secondColor">
-            {options.find((option) => option.value === selectOption)?.icon}
+            {options.find((option) => option.value === value)?.icon}
           </span>
           <p className="font-semibold text-sm">
-            {options.find((option) => option.value === selectOption)?.value}
+            {options.find((option) => option.value === value)?.value}
           </p>
         </div>
         <IoIosArrowDown className="text-secondColor" />
