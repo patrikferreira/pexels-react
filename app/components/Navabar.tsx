@@ -3,7 +3,7 @@ import Logo from "./Logo";
 import Search from "./Search";
 
 export default function Navbar() {
-    return <div className="p-4 shadow-customShadow">
+    return <div className="shadow-customShadow bg-background">
         <FixedContainer>
             <div className="flex justify-between items-center">
              <Logo />
