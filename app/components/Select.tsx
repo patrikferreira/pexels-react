@@ -1,17 +1,12 @@
 "use client";
-
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { AiOutlinePicture } from "react-icons/ai";
 import { IoIosArrowDown } from "react-icons/io";
 import { MdOutlineOndemandVideo } from "react-icons/md";
 import Popover from "./Popover";
+import { AppContext } from "../store/AppContext";
 
-type Props = {
-  value: string;
-  onChange: (value: string) => void;
-}
-
-export default function Select({ value, onChange }: Props) {
+export default function Select() {
   const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
 
   const options = [
@@ -19,20 +14,29 @@ export default function Select({ value, onChange }: Props) {
     { value: "Videos", label: "Videos", icon: <MdOutlineOndemandVideo /> },
   ];
 
+  const { fetchOption, setFetchOption } = useContext(AppContext);
+
+  if (!fetchOption || !setFetchOption) {
+    throw new Error("AppContext must be used within an AppProvider");
+  }
+
   function handleOptionClick(value: string) {
-    onChange(value);
+    setFetchOption(value);
     setIsPopoverOpen(false);
-  };
+  }
 
   return (
     <div className="relative">
-      <div className="flex items-center gap-2 bg-background p-3 min-h-full rounded-xl cursor-pointer w-26" onClick={() => setIsPopoverOpen((prev => !prev))}>
+      <div
+        className="flex items-center gap-2 bg-background p-3 min-h-full rounded-xl cursor-pointer w-26"
+        onClick={() => setIsPopoverOpen((prev) => !prev)}
+      >
         <div className="flex items-center gap-2">
           <span className="text-secondColor">
-            {options.find((option) => option.value === value)?.icon}
+            {options.find((option) => option.value === fetchOption)?.icon}
           </span>
           <p className="font-semibold text-sm">
-            {options.find((option) => option.value === value)?.value}
+            {options.find((option) => option.value === fetchOption)?.value}
           </p>
         </div>
         <IoIosArrowDown className="text-secondColor" />
@@ -40,7 +44,7 @@ export default function Select({ value, onChange }: Props) {
 
       {isPopoverOpen && (
         <Popover onClose={() => setIsPopoverOpen(false)} className="top-14">
-            <div>
+          <div>
             {options.map((option) => (
               <div
                 key={option.value}

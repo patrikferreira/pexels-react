@@ -13,7 +13,7 @@ export default function Search() {
     }
 
     return <div className="p-2 rounded-2xl flex items-center bg-firstColor">
-        <Select value={fetchOption} onChange={setFetchOption} />
+        <Select />
         <input type="text" placeholder="Search pictures" className="text-sm font-semibold outline-none px-2 text-foreground bg-firstColor" />
         <Button action={search} content={<IoSearchSharp />} className="hover:bg-background hover:text-foreground transition-all duration-200 p-3 rounded-xl text-xl" />
     </div>
