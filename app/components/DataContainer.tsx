@@ -24,16 +24,25 @@ export default function DataContainer() {
     async function fetchData() {
       setIsLoading(true);
       try {
-        let data: any;
-        if(fetchOption === "Photos") {
-          data = await getData.getPhotos(currentPage, perPage);
-          setData((prevPhotos) => [...prevPhotos, ...data.photos]);
-          setTotalResults(data.total_results);
+        let responseData: any;
+
+        if (fetchOption === "Photos") {
+          responseData = await getData.getPhotos(currentPage, perPage);
+          setData((prevData) =>
+            currentPage === 1
+              ? responseData.photos
+              : [...prevData, ...responseData.photos]
+          );
         } else {
-          data = await getData.getVideos(currentPage, perPage);
-          setData((prevData) => [...prevData, ...data.videos]);
-          setTotalResults(data.total_results);
+          responseData = await getData.getVideos(currentPage, perPage);
+          setData((prevData) =>
+            currentPage === 1
+              ? responseData.videos
+              : [...prevData, ...responseData.videos]
+          );
         }
+
+        setTotalResults(responseData.total_results);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -42,7 +51,12 @@ export default function DataContainer() {
     }
 
     fetchData();
-  }, [currentPage, perPage]);
+  }, [fetchOption, currentPage]);
+
+  useEffect(() => {
+    setData([]);
+    setCurrentPage(1);
+  }, [fetchOption]);
 
   const handleLoadMore = () => {
     if (data.length < totalResults) {
@@ -56,22 +70,45 @@ export default function DataContainer() {
         {isLoading && data.length === 0 ? (
           <LoadSpin />
         ) : (
-          <div className="grid grid-cols-3 gap-4 animate-fadeIn">
-            {fetchOption}
-            {/* {data.map((photo: any, index: number) => (
-              <img
-                key={`${photo.id}-${index}`}
-                src={photo.src.large2x}
-                alt={photo.alt}
-                className="w-full h-auto"
-              />
-            ))} */}
+          <div>
+            {fetchOption === "Photos" ? (
+              <div className="grid grid-cols-3 gap-4 animate-fadeIn">
+                {data.map((photo: any, index: number) => (
+                  <img
+                    key={`${photo.id}-${index}`}
+                    src={photo.src?.large2x || photo.src?.original}
+                    alt={photo.alt}
+                    className="w-full h-auto"
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-3 gap-4 animate-fadeIn">
+                {data.map((video: any, index: number) => (
+                  <video
+                    key={`${video.id}-${index}`}
+                    controls
+                    className="w-full h-auto"
+                  >
+                    {video.video_files?.length > 0 ? (
+                      <source
+                        src={video.video_files[0]?.link}
+                        type="video/mp4"
+                      />
+                    ) : (
+                      <p>Video not available</p>
+                    )}
+                    Your browser does not support videos.
+                  </video>
+                ))}
+              </div>
+            )}
           </div>
         )}
         {data.length < totalResults && (
           <div className="flex justify-center mt-4">
             <Button
-              content={isLoading ? "Carregando..." : "Carregar mais"}
+              content={isLoading ? "Loading..." : "Load more"}
               action={handleLoadMore}
               className="w-32 py-2 rounded-xl bg-firstColor shadow-customShadow text-thirdColor text-sm font-semibold"
             />
