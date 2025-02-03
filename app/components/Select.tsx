@@ -14,7 +14,7 @@ export default function Select() {
     { value: "Videos", label: "Videos", icon: <MdOutlineOndemandVideo /> },
   ];
 
-  const { fetchOption, setFetchOption } = useContext(AppContext);
+  const { fetchOption, setFetchOption, setSearchQuery } = useContext(AppContext);
 
   if (!fetchOption || !setFetchOption) {
     throw new Error("AppContext must be used within an AppProvider");
@@ -22,6 +22,7 @@ export default function Select() {
 
   function handleOptionClick(value: string) {
     setFetchOption(value);
+    setSearchQuery("");
     setIsPopoverOpen(false);
   }
 

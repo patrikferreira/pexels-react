@@ -14,6 +14,7 @@ export default {
         firstColor: "#f7f7f7",
         secondColor: "#cccccc",
         thirdColor: "#b8b8b8",
+        accentColor: "#fb1",
       },
       fontFamily: {
         custom: ["Playwrite IN", "serif"],

@@ -12,6 +12,7 @@ export default function Search() {
 
     function handleSearch() {
         setSearchQuery(query);
+        setQuery("")
     }
 
     function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -24,12 +25,12 @@ export default function Search() {
         <Select />
         <input
             type="text"
-            placeholder="Search pictures"
+            placeholder="Search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             className="text-sm font-semibold outline-none px-2 text-foreground bg-firstColor"
         />
-        <Button action={handleSearch} content={<IoSearchSharp />} className="hover:bg-background hover:text-foreground transition-all duration-200 p-3 rounded-xl text-xl" />
+        <Button action={handleSearch} content={<IoSearchSharp />} className="bg-accentColor hover:brightness-95 hover:text-foreground transition-all duration-200 p-3 rounded-xl text-xl" />
     </div>
 }
