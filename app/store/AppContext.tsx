@@ -4,6 +4,8 @@ import { createContext, ReactNode, useState } from "react";
 type AppCtx = {
     fetchOption: string;
     setFetchOption: (value: string) => void;
+    searchQuery: string;
+    setSearchQuery: (value: string) => void;
 }
 
 type Props = {
@@ -13,10 +15,11 @@ type Props = {
 export const AppContext = createContext<AppCtx>({} as AppCtx);
 
 export default function AppProvider({ children }: Props) {
-    const [fetchOption, setFetchOption] = useState<string>("Photos")
+    const [fetchOption, setFetchOption] = useState<string>("Photos");
+    const [searchQuery, setSearchQuery] = useState<string>("");
 
     return (
-        <AppContext.Provider value={{fetchOption, setFetchOption}}>
+        <AppContext.Provider value={{fetchOption, setFetchOption, searchQuery, setSearchQuery}}>
             {children}
         </AppContext.Provider>
     )

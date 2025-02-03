@@ -4,10 +4,13 @@ export async function GET(request: Request) {
     const apiKey = process.env.PEXELS_API_key;
     const { searchParams } = new URL(request.url);
 
+    const query = searchParams.get("query") || "";
     const page = searchParams.get("page") || 1;
     const perPage = searchParams.get("per_page") || 15;
 
-    const baseUrl = `https://api.pexels.com/videos/popular?page=${page}&per_page=${perPage}`;
+    const baseUrl = query
+        ? `https://api.pexels.com/videos/search?query=${query}&page=${page}&per_page=${perPage}`
+        : `https://api.pexels.com/videos/popular?page=${page}&per_page=${perPage}`;
 
     try {
         const response = await fetch(baseUrl, {

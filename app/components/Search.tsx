@@ -6,15 +6,23 @@ import Button from "./Button";
 import { AppContext } from "../store/AppContext";
 
 export default function Search() {
-    const { fetchOption, setFetchOption } = useContext(AppContext)
+    const [query, setQuery] = useState<string>("");
 
-    function search() {
-        alert(`Searching for ${fetchOption}`);
+    const { fetchOption, setFetchOption, setSearchQuery } = useContext(AppContext);
+
+    function handleSearch() {
+        setSearchQuery(query);
     }
 
     return <div className="p-2 rounded-2xl flex items-center bg-firstColor">
         <Select />
-        <input type="text" placeholder="Search pictures" className="text-sm font-semibold outline-none px-2 text-foreground bg-firstColor" />
-        <Button action={search} content={<IoSearchSharp />} className="hover:bg-background hover:text-foreground transition-all duration-200 p-3 rounded-xl text-xl" />
+        <input
+            type="text"
+            placeholder="Search pictures"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="text-sm font-semibold outline-none px-2 text-foreground bg-firstColor"
+        />
+        <Button action={handleSearch} content={<IoSearchSharp />} className="hover:bg-background hover:text-foreground transition-all duration-200 p-3 rounded-xl text-xl" />
     </div>
 }

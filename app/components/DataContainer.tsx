@@ -12,7 +12,7 @@ export default function DataContainer() {
   const [totalResults, setTotalResults] = useState<number>(0);
   const [perPage] = useState<number>(15);
 
-  const { fetchOption } = useContext(AppContext);
+  const { fetchOption, searchQuery } = useContext(AppContext);
 
   if (!fetchOption) {
     throw new Error("AppContext must be used within an AppProvider");
@@ -27,14 +27,14 @@ export default function DataContainer() {
         let responseData: any;
 
         if (fetchOption === "Photos") {
-          responseData = await getData.getPhotos(currentPage, perPage);
+          responseData = await getData.getPhotos(currentPage, perPage, searchQuery);
           setData((prevData) =>
             currentPage === 1
               ? responseData.photos
               : [...prevData, ...responseData.photos]
           );
         } else {
-          responseData = await getData.getVideos(currentPage, perPage);
+          responseData = await getData.getVideos(currentPage, perPage, searchQuery);
           setData((prevData) =>
             currentPage === 1
               ? responseData.videos
@@ -51,12 +51,12 @@ export default function DataContainer() {
     }
 
     fetchData();
-  }, [fetchOption, currentPage]);
+  }, [fetchOption, currentPage, searchQuery]);
 
   useEffect(() => {
     setData([]);
     setCurrentPage(1);
-  }, [fetchOption]);
+  }, [fetchOption, searchQuery]);
 
   const handleLoadMore = () => {
     if (data.length < totalResults) {

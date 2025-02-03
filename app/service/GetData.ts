@@ -23,11 +23,11 @@ export default class GetData {
         }
     }
 
-    public async getPhotos(page: number = 1, perPage: number = 15) {
-        return this.fetchFromApi('/photos', { page: String(page), per_page: String(perPage) });
+    public async getPhotos(page: number = 1, perPage: number = 15, query: string = "") {
+        return this.fetchFromApi('/photos', { page: String(page), per_page: String(perPage), query });
     }
 
-    public async getVideos(page: number = 1, perPage: number = 15) {
-        return this.fetchFromApi('/videos', { page: String(page), per_page: String(perPage) });
+    public async getVideos(page: number = 1, perPage: number = 15, query: string = "") {
+        return this.fetchFromApi('/videos', { page: String(page), per_page: String(perPage), query });
     }
 }
