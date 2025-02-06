@@ -5,6 +5,7 @@ import Button from "./Button";
 import { AppContext } from "../store/AppContext";
 import GetData from "../service/GetData";
 import Image from "./Image";
+import Video from "./Video";
 
 export default function DataContainer() {
   const [data, setData] = useState<any[]>([]);
@@ -94,21 +95,11 @@ export default function DataContainer() {
             ) : (
               <div className="columns-3 space-y-4 animate-fadeIn">
                 {data.map((video: any, index: number) => (
-                  <video
+                  <Video
                     key={`${video.id}-${index}`}
-                    controls
-                    className="w-full h-auto"
-                  >
-                    {video.video_files?.length > 0 ? (
-                      <source
-                        src={video.video_files[0]?.link}
-                        type="video/mp4"
-                      />
-                    ) : (
-                      <p>Video not available</p>
-                    )}
-                    Your browser does not support videos.
-                  </video>
+                    src={video.video_files?.[0]?.link}
+                    photographer={video.user?.name || "Unknown"}
+                  />
                 ))}
               </div>
             )}
