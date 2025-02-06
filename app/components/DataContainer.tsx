@@ -81,7 +81,7 @@ export default function DataContainer() {
         ) : (
           <div>
             {fetchOption === "Photos" ? (
-              <div className="grid grid-cols-3 gap-4 animate-fadeIn">
+              <div className="columns-3 space-y-4 animate-fadeIn">
                 {data.map((photo: any, index: number) => (
                   <Image
                     key={`${photo.id}-${index}`}
@@ -92,7 +92,7 @@ export default function DataContainer() {
                 ))}
               </div>
             ) : (
-              <div className="grid grid-cols-3 gap-4 animate-fadeIn">
+              <div className="columns-3 space-y-4 animate-fadeIn">
                 {data.map((video: any, index: number) => (
                   <video
                     key={`${video.id}-${index}`}
