@@ -3,7 +3,7 @@ import FixedContainer from "./components/FixedContainer";
 
 export default function Home() {
   return (
-    <div className="h-full">
+    <div className="h-full mt-28">
       <FixedContainer>
         <DataContainer />
       </FixedContainer>

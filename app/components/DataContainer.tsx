@@ -12,7 +12,7 @@ export default function DataContainer() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalResults, setTotalResults] = useState<number>(0);
-  const [perPage] = useState<number>(15);
+  const [perPage] = useState<number>(30);
 
   const { fetchOption, searchQuery } = useContext(AppContext);
 
