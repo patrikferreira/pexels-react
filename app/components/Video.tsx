@@ -1,5 +1,5 @@
-import { useState, useRef } from "react";
-import { MdOutlinePlayCircle, MdOutlinePauseCircle, MdOutlineFileDownload } from "react-icons/md";
+import { useRef } from "react";
+import { MdOutlineFileDownload, MdOutlinePlayCircle } from "react-icons/md";
 import Button from "./Button";
 
 type Props = {
@@ -15,17 +15,19 @@ export default function Video({
   photographer,
   className,
 }: Props) {
-  const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  function handlePlayPause() {
+  function handleMouseEnter() {
+    if (videoRef.current && videoRef.current.readyState >= 2) {
+      videoRef.current
+        .play()
+        .catch((error) => console.warn("Autoplay blocked:", error));
+    }
+  }
+
+  function handleMouseLeave() {
     if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-      } else {
-        videoRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
+      videoRef.current.pause();
     }
   }
 
@@ -48,22 +50,14 @@ export default function Video({
       <video
         ref={videoRef}
         className={`w-full h-auto ${className}`}
-        onClick={handlePlayPause}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        muted
+        playsInline
       >
         <source src={src} type="video/mp4" />
         Your browser does not support videos.
       </video>
-
-      <div
-        className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 transition-opacity duration-300 group-hover:bg-opacity-50"
-        onClick={handlePlayPause}
-      >
-        {isPlaying ? (
-          <MdOutlinePauseCircle className="text-6xl text-white" />
-        ) : (
-          <MdOutlinePlayCircle className="text-6xl text-white" />
-        )}
-      </div>
 
       <div className="flex items-center w-full justify-between p-4 absolute bottom-0 text-background opacity-0 group-hover:opacity-100 transition-opacity duration-300">
         <div className="flex items-center gap-2">
