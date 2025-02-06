@@ -4,6 +4,7 @@ import LoadSpin from "./LoadSpin";
 import Button from "./Button";
 import { AppContext } from "../store/AppContext";
 import GetData from "../service/GetData";
+import Image from "./Image";
 
 export default function DataContainer() {
   const [data, setData] = useState<any[]>([]);
@@ -27,14 +28,22 @@ export default function DataContainer() {
         let responseData: any;
 
         if (fetchOption === "Photos") {
-          responseData = await getData.getPhotos(currentPage, perPage, searchQuery);
+          responseData = await getData.getPhotos(
+            currentPage,
+            perPage,
+            searchQuery
+          );
           setData((prevData) =>
             currentPage === 1
               ? responseData.photos
               : [...prevData, ...responseData.photos]
           );
         } else {
-          responseData = await getData.getVideos(currentPage, perPage, searchQuery);
+          responseData = await getData.getVideos(
+            currentPage,
+            perPage,
+            searchQuery
+          );
           setData((prevData) =>
             currentPage === 1
               ? responseData.videos
@@ -74,11 +83,11 @@ export default function DataContainer() {
             {fetchOption === "Photos" ? (
               <div className="grid grid-cols-3 gap-4 animate-fadeIn">
                 {data.map((photo: any, index: number) => (
-                  <img
+                  <Image
                     key={`${photo.id}-${index}`}
                     src={photo.src?.large2x || photo.src?.original}
                     alt={photo.alt}
-                    className="w-full h-auto"
+                    photographer={photo.photographer}
                   />
                 ))}
               </div>
@@ -108,10 +117,11 @@ export default function DataContainer() {
         {data.length < totalResults && (
           <div className="flex justify-center mt-4">
             <Button
-              content={isLoading ? "Loading..." : "Load more"}
               action={handleLoadMore}
               className="w-32 py-2 rounded-xl bg-firstColor shadow-customShadow text-thirdColor text-sm font-semibold"
-            />
+            >
+              {isLoading ? "Loading..." : "Load more"}
+            </Button>
           </div>
         )}
       </div>
