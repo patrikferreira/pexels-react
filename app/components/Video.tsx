@@ -1,6 +1,7 @@
 import { useRef } from "react";
-import { MdOutlineFileDownload, MdOutlinePlayCircle } from "react-icons/md";
+import { MdOutlineFileDownload } from "react-icons/md";
 import Button from "./Button";
+import { TbPhotoSensor2 } from "react-icons/tb";
 
 type Props = {
   src: string;
@@ -61,7 +62,7 @@ export default function Video({
 
       <div className="flex items-center w-full justify-between p-4 absolute bottom-0 text-background opacity-0 group-hover:opacity-100 transition-opacity duration-300">
         <div className="flex items-center gap-2">
-          <MdOutlinePlayCircle className="text-2xl" /> {photographer}
+          <TbPhotoSensor2 className="text-3xl" /> {photographer}
         </div>
         <div>
           <Button

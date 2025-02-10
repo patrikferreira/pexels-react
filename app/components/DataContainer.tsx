@@ -6,6 +6,7 @@ import { AppContext } from "../store/AppContext";
 import GetData from "../service/GetData";
 import Image from "./Image";
 import Video from "./Video";
+import Modal from "./Modal";
 
 export default function DataContainer() {
   const [data, setData] = useState<any[]>([]);
@@ -13,6 +14,12 @@ export default function DataContainer() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalResults, setTotalResults] = useState<number>(0);
   const [perPage] = useState<number>(30);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [selectedElement, setSelectedElement] = useState<{
+    type: "image" | "video";
+    src: string;
+    photographer: string;
+  } | null>(null);
 
   const { fetchOption, searchQuery } = useContext(AppContext);
 
@@ -68,11 +75,25 @@ export default function DataContainer() {
     setCurrentPage(1);
   }, [fetchOption, searchQuery]);
 
-  const handleLoadMore = () => {
+  function handleLoadMore() {
     if (data.length < totalResults) {
       setCurrentPage((prevPage) => prevPage + 1);
     }
-  };
+  }
+
+  function handleElement(
+    type: "image" | "video",
+    src: string,
+    photographer: string
+  ) {
+    setSelectedElement({ type, src, photographer });
+    setIsModalOpen(true);
+  }
+
+  function handleCloseModal() {
+    setIsModalOpen(false);
+    setSelectedElement(null);
+  }
 
   return (
     <div className="h-full">
@@ -84,22 +105,43 @@ export default function DataContainer() {
             {fetchOption === "Photos" ? (
               <div className="columns-3 space-y-4 animate-fadeIn">
                 {data.map((photo: any, index: number) => (
-                  <Image
+                  <div
                     key={`${photo.id}-${index}`}
-                    src={photo.src?.large2x || photo.src?.original}
-                    alt={photo.alt}
-                    photographer={photo.photographer}
-                  />
+                    onClick={() =>
+                      handleElement(
+                        "image",
+                        photo.src?.large2x || photo.src?.original,
+                        photo.photographer
+                      )
+                    }
+                  >
+                    <Image
+                      key={`${photo.id}-${index}`}
+                      src={photo.src?.large2x || photo.src?.original}
+                      alt={photo.alt}
+                      photographer={photo.photographer}
+                    />
+                  </div>
                 ))}
               </div>
             ) : (
               <div className="columns-3 space-y-4 animate-fadeIn">
                 {data.map((video: any, index: number) => (
-                  <Video
+                  <div
                     key={`${video.id}-${index}`}
-                    src={video.video_files?.[0]?.link}
-                    photographer={video.user?.name || "Unknown"}
-                  />
+                    onClick={() =>
+                      handleElement(
+                        "video",
+                        video.video_files?.[0]?.link,
+                        video.user?.name
+                      )
+                    }
+                  >
+                    <Video
+                      src={video.video_files?.[0]?.link}
+                      photographer={video.user?.name || "Unknown"}
+                    />
+                  </div>
                 ))}
               </div>
             )}
@@ -116,6 +158,20 @@ export default function DataContainer() {
           </div>
         )}
       </div>
+
+      {isModalOpen && selectedElement && (
+        <Modal onClose={handleCloseModal} title={selectedElement.photographer}>
+          {selectedElement.type === "image" ? (
+            <img src={selectedElement.src} alt="Selected" />
+          ) : (
+            <video
+              src={selectedElement.src}
+              controls
+              className="max-w-full max-h-[80vh] rounded-lg"
+            />
+          )}
+        </Modal>
+      )}
     </div>
   );
 }
