@@ -1,14 +1,13 @@
-import DataContainer from "./components/DataContainer";
-import FixedContainer from "./components/FixedContainer";
-import GetKey from "./components/GetKey";
+"use client"
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Home() {
-  return (
-    <div className="h-full">
-      <FixedContainer>
-        <GetKey />
-        {/* <DataContainer /> */}
-      </FixedContainer>
-    </div>
-  );
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push("/photos");
+  }, [router]);
+
+  return null;
 }

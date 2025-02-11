@@ -20,5 +20,5 @@ html {
 }
 
 input::placeholder {
-  color: #cccccc;
+  color: var(--foreground);
 }

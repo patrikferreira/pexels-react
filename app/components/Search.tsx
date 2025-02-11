@@ -23,19 +23,19 @@ export default function Search() {
   }
 
   return (
-    <div className="p-2 rounded-2xl flex items-center bg-firstColor">
+    <div className="p-2 rounded-full flex items-center bg-firstColor">
       <Select />
       <input
         type="text"
-        placeholder="Search"
+        placeholder="What are you looking for?"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={handleKeyDown}
-        className=" outline-none px-2 text-foreground bg-firstColor"
+        className=" outline-none px-3 text-sm text-foreground bg-firstColor"
       />
       <Button
         action={handleSearch}
-        className="bg-accentColor hover:brightness-95 hover:text-foreground transition-all duration-200 p-3 rounded-xl text-xl"
+        className="bg-accentColor hover:brightness-95 hover:text-foreground transition-all duration-200 p-3 rounded-full text-xl"
       >
         <IoSearchSharp />
       </Button>

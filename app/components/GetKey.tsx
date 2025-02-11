@@ -22,7 +22,7 @@ export default function GetKey() {
           <input
             type="text"
             placeholder="OtOinFOgc7RMjAdFSRH"
-            className="p-2 rounded-lg outline-none bg-firstColor shadow-customShadow"
+            className="p-3 rounded-lg outline-none bg-firstColor shadow-customShadow text-sm"
           />
           <Button
             action={sendKey}

@@ -1,5 +1,6 @@
 "use client";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { AiOutlinePicture } from "react-icons/ai";
 import { IoIosArrowDown } from "react-icons/io";
 import { MdOutlineOndemandVideo } from "react-icons/md";
@@ -8,6 +9,7 @@ import { AppContext } from "../store/AppContext";
 
 export default function Select() {
   const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
+  const router = useRouter();
 
   const options = [
     { value: "Photos", label: "Photos", icon: <AiOutlinePicture /> },
@@ -24,23 +26,29 @@ export default function Select() {
     setFetchOption(value);
     setSearchQuery("");
     setIsPopoverOpen(false);
+
+    router.push(value === "Photos" ? "/photos" : "/videos");
   }
 
   return (
     <div className="relative">
       <div
-        className="flex items-center gap-2 bg-background p-3 min-h-full rounded-xl cursor-pointer w-26"
+        className="flex items-center gap-2 bg-background p-3 min-h-full rounded-full cursor-pointer w-26"
         onClick={() => setIsPopoverOpen((prev) => !prev)}
       >
         <div className="flex items-center gap-2">
           <span className="text-secondColor">
             {options.find((option) => option.value === fetchOption)?.icon}
           </span>
-          <p className="">
+          <p className="text-sm font-semibold">
             {options.find((option) => option.value === fetchOption)?.value}
           </p>
         </div>
-        <IoIosArrowDown className="text-secondColor" />
+        <IoIosArrowDown
+          className={`text-secondColor transition-transform duration-300 ${
+            isPopoverOpen ? "rotate-180" : ""
+          }`}
+        />
       </div>
 
       {isPopoverOpen && (
@@ -53,7 +61,7 @@ export default function Select() {
                 className="flex items-center gap-2 px-3 py-2 cursor-pointer rounded-xl hover:bg-firstColor"
               >
                 <span className="text-secondColor">{option.icon}</span>
-                <span className="text-md">{option.label}</span>
+                <span className="text-sm font-semibold">{option.label}</span>
               </div>
             ))}
           </div>
