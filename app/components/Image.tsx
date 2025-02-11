@@ -35,7 +35,7 @@ export default function Image({
         <div className="flex items-center gap-2">
           <TbPhotoSensor2 className="text-3xl" /> {photographer}
         </div>
-        <div>
+        <div onClick={(e) => e.stopPropagation()}>
           <DownloadBtn src={src} alt={alt} />
         </div>
       </div>
