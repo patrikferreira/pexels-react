@@ -19,6 +19,7 @@ export default function DataContainer() {
     type: "image" | "video";
     src: string;
     photographer: string;
+    alt: string;
   } | null>(null);
 
   const { fetchOption, searchQuery } = useContext(AppContext);
@@ -84,9 +85,10 @@ export default function DataContainer() {
   function handleElement(
     type: "image" | "video",
     src: string,
-    photographer: string
+    photographer: string,
+    alt: string
   ) {
-    setSelectedElement({ type, src, photographer });
+    setSelectedElement({ type, src, photographer, alt });
     setIsModalOpen(true);
   }
 
@@ -111,7 +113,8 @@ export default function DataContainer() {
                       handleElement(
                         "image",
                         photo.src?.large2x || photo.src?.original,
-                        photo.photographer
+                        photo.photographer,
+                        photo.alt
                       )
                     }
                   >
@@ -133,7 +136,8 @@ export default function DataContainer() {
                       handleElement(
                         "video",
                         video.video_files?.[0]?.link,
-                        video.user?.name
+                        video.user?.name,
+                        video.alt
                       )
                     }
                   >
@@ -160,7 +164,7 @@ export default function DataContainer() {
       </div>
 
       {isModalOpen && selectedElement && (
-        <Modal onClose={handleCloseModal} title={selectedElement.photographer}>
+        <Modal onClose={handleCloseModal} title={selectedElement.photographer} src={selectedElement.src} alt={selectedElement.alt}>
           {selectedElement.type === "image" ? (
             <img src={selectedElement.src} alt="Selected" />
           ) : (

@@ -4,15 +4,18 @@ import { IoIosClose } from "react-icons/io";
 import Button from "./Button";
 import { MdOutlineFileDownload } from "react-icons/md";
 import { TbPhotoSensor2 } from "react-icons/tb";
+import DownloadBtn from "./DownloadBtn";
 
 type Props = {
   onClose: () => void;
   title?: string;
   children: ReactNode;
   className?: string;
+  src: string;
+  alt: string;
 };
 
-export default function Modal({ onClose, title, children, className }: Props) {
+export default function Modal({ onClose, title, children, className, src, alt }: Props) {
   function handleBackdropClick(e: React.MouseEvent) {
     if (e.target === e.currentTarget) {
       onClose();
@@ -36,13 +39,7 @@ export default function Modal({ onClose, title, children, className }: Props) {
            <TbPhotoSensor2 className="text-3xl" />
             {title}
           </div>
-          <Button
-            action={download}
-            className="flex items-center gap-2 text-md text-background bg-accentColor hover:brightness-95 transition-all duration-200 rounded-lg py-3 px-4"
-          >
-            <MdOutlineFileDownload className="text-xl" />
-            Download
-          </Button>
+          <DownloadBtn src={src} alt={alt} />
         </div>
         <div className="">{children}</div>
         <Button action={onClose} className="absolute top-0 right-[-40]">

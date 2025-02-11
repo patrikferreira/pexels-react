@@ -1,6 +1,5 @@
-import { MdOutlineFileDownload } from "react-icons/md";
-import Button from "./Button";
 import { TbPhotoSensor2 } from "react-icons/tb";
+import DownloadBtn from "./DownloadBtn";
 
 type Props = {
   src: string;
@@ -37,13 +36,7 @@ export default function Image({
           <TbPhotoSensor2 className="text-3xl" /> {photographer}
         </div>
         <div>
-          <Button
-            action={download}
-            className="flex items-center gap-2 text-md text-background bg-accentColor hover:brightness-95 transition-all duration-200 rounded-lg py-3 px-4"
-          >
-            <MdOutlineFileDownload className="text-xl" />
-            Download
-          </Button>
+          <DownloadBtn src={src} alt={alt} />
         </div>
       </div>
     </div>

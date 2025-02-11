@@ -31,7 +31,7 @@ export default function Search() {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={handleKeyDown}
-        className="text-sm font-semibold outline-none px-2 text-foreground bg-firstColor"
+        className=" outline-none px-2 text-foreground bg-firstColor"
       />
       <Button
         action={handleSearch}

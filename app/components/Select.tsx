@@ -36,7 +36,7 @@ export default function Select() {
           <span className="text-secondColor">
             {options.find((option) => option.value === fetchOption)?.icon}
           </span>
-          <p className="font-semibold text-sm">
+          <p className="">
             {options.find((option) => option.value === fetchOption)?.value}
           </p>
         </div>
@@ -53,7 +53,7 @@ export default function Select() {
                 className="flex items-center gap-2 px-3 py-2 cursor-pointer rounded-xl hover:bg-firstColor"
               >
                 <span className="text-secondColor">{option.icon}</span>
-                <span className="text-sm font-semibold">{option.label}</span>
+                <span className="text-md">{option.label}</span>
               </div>
             ))}
           </div>
