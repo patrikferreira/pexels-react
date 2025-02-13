@@ -1,5 +1,6 @@
 "use client"
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 type AppCtx = {
     fetchOption: string;
@@ -17,6 +18,15 @@ export const AppContext = createContext<AppCtx>({} as AppCtx);
 export default function AppProvider({ children }: Props) {
     const [fetchOption, setFetchOption] = useState<string>("Photos");
     const [searchQuery, setSearchQuery] = useState<string>("");
+    const pathname = usePathname();
+
+    useEffect(() => {
+        if (pathname.includes("photos")) {
+            setFetchOption("Photos");
+        } else if (pathname.includes("videos")) {
+            setFetchOption("Videos");
+        }
+    }, [pathname]);
 
     return (
         <AppContext.Provider value={{fetchOption, setFetchOption, searchQuery, setSearchQuery}}>
