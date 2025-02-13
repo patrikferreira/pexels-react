@@ -1,11 +1,10 @@
 "use client";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { AppContext } from "../store/AppContext";
 import GetData from "../service/GetData";
 import LoadSpin from "../components/LoadSpin";
 import Video from "../components/Video";
 import Modal from "../components/Modal";
-import Button from "../components/Button";
 import FixedContainer from "../components/FixedContainer";
 
 export default function Videos() {
@@ -23,6 +22,7 @@ export default function Videos() {
 
   const { searchQuery } = useContext(AppContext);
   const getData = new GetData();
+  const scrollRef = useRef(false);
 
   useEffect(() => {
     async function fetchVideos() {
@@ -33,16 +33,19 @@ export default function Videos() {
           perPage,
           searchQuery
         );
-        setVideos((prevVideos) =>
-          currentPage === 1
-            ? responseData.videos
-            : [...prevVideos, ...responseData.videos]
-        );
+        setVideos((prevVideos) => {
+          const newVideos = [...prevVideos, ...responseData.videos];
+
+          const uniqueVideos = Array.from(new Map(newVideos.map(video => [video.id, video])).values());
+
+          return currentPage === 1 ? responseData.videos : uniqueVideos;
+        });
         setTotalResults(responseData.total_results);
       } catch (error) {
         console.error("Error fetching videos:", error);
       } finally {
         setIsLoading(false);
+        scrollRef.current = false;
       }
     }
 
@@ -54,11 +57,22 @@ export default function Videos() {
     setCurrentPage(1);
   }, [searchQuery]);
 
-  function handleLoadMore() {
-    if (videos.length < totalResults) {
+  function handleScroll() {
+    if (scrollRef.current) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+    const isBottom = scrollTop + clientHeight >= scrollHeight - 10;
+
+    if (isBottom && videos.length < totalResults) {
+      scrollRef.current = true;
       setCurrentPage((prevPage) => prevPage + 1);
     }
   }
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [videos, totalResults]);
 
   function handleVideoClick(src: string, photographer: string, alt: string) {
     setSelectedVideo({ src, photographer, alt });
@@ -96,16 +110,8 @@ export default function Videos() {
             ))}
           </div>
         )}
-        {videos.length < totalResults && (
-          <div className="flex justify-center mt-4">
-            <Button
-              action={handleLoadMore}
-              className="w-32 py-2 rounded-xl bg-firstColor shadow-customShadow text-thirdColor text-sm font-semibold"
-            >
-              {isLoading ? "Loading..." : "Load more"}
-            </Button>
-          </div>
-        )}
+
+        {isLoading && <LoadSpin />}
 
         {isModalOpen && selectedVideo && (
           <Modal

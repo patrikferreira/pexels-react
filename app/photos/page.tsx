@@ -1,11 +1,10 @@
 "use client";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef, useCallback } from "react";
 import { AppContext } from "../store/AppContext";
 import GetData from "../service/GetData";
 import LoadSpin from "../components/LoadSpin";
 import Image from "../components/Image";
 import Modal from "../components/Modal";
-import Button from "../components/Button";
 import FixedContainer from "../components/FixedContainer";
 
 export default function Photos() {
@@ -23,26 +22,26 @@ export default function Photos() {
 
   const { searchQuery } = useContext(AppContext);
   const getData = new GetData();
+  const scrollRef = useRef<boolean>(false);
 
   useEffect(() => {
     async function fetchPhotos() {
       setIsLoading(true);
       try {
-        const responseData = await getData.getPhotos(
-          currentPage,
-          perPage,
-          searchQuery
-        );
-        setPhotos((prevPhotos) =>
-          currentPage === 1
-            ? responseData.photos
-            : [...prevPhotos, ...responseData.photos]
-        );
+        const responseData = await getData.getPhotos(currentPage, perPage, searchQuery);
+        setPhotos((prevPhotos) => {
+          const newPhotos = [...prevPhotos, ...responseData.photos];
+
+          const uniquePhotos = Array.from(new Map(newPhotos.map(photo => [photo.id, photo])).values());
+
+          return currentPage === 1 ? responseData.photos : uniquePhotos;
+        });
         setTotalResults(responseData.total_results);
       } catch (error) {
         console.error("Error fetching photos:", error);
       } finally {
         setIsLoading(false);
+        scrollRef.current = false;
       }
     }
 
@@ -54,11 +53,22 @@ export default function Photos() {
     setCurrentPage(1);
   }, [searchQuery]);
 
-  function handleLoadMore() {
-    if (photos.length < totalResults) {
+  const handleScroll = useCallback(() => {
+    if (scrollRef.current) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+    const isBottom = scrollTop + clientHeight >= scrollHeight - 10;
+
+    if (isBottom && photos.length < totalResults) {
+      scrollRef.current = true;
       setCurrentPage((prevPage) => prevPage + 1);
     }
-  }
+  }, [photos.length, totalResults]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
 
   function handlePhotoClick(src: string, photographer: string, alt: string) {
     setSelectedPhoto({ src, photographer, alt });
@@ -77,44 +87,21 @@ export default function Photos() {
           <LoadSpin />
         ) : (
           <div className="columns-3 space-y-4 animate-fadeIn">
-            {photos.map((photo, index) => (
+            {photos.map((photo) => (
               <div
-                key={`${photo.id}-${index}`}
-                onClick={() =>
-                  handlePhotoClick(
-                    photo.src?.large2x || photo.src?.original,
-                    photo.photographer,
-                    photo.alt
-                  )
-                }
+                key={photo.id}
+                onClick={() => handlePhotoClick(photo.src?.large2x || photo.src?.original, photo.photographer, photo.alt)}
               >
-                <Image
-                  src={photo.src?.large2x || photo.src?.original}
-                  alt={photo.alt}
-                  photographer={photo.photographer}
-                />
+                <Image src={photo.src?.large2x || photo.src?.original} alt={photo.alt} photographer={photo.photographer} />
               </div>
             ))}
           </div>
         )}
-        {photos.length < totalResults && (
-          <div className="flex justify-center mt-4">
-            <Button
-              action={handleLoadMore}
-              className="w-32 py-2 rounded-xl bg-firstColor shadow-customShadow text-thirdColor text-sm font-semibold"
-            >
-              {isLoading ? "Loading..." : "Load more"}
-            </Button>
-          </div>
-        )}
+
+        {isLoading && <LoadSpin />}
 
         {isModalOpen && selectedPhoto && (
-          <Modal
-            onClose={handleCloseModal}
-            title={selectedPhoto.photographer}
-            src={selectedPhoto.src}
-            alt={selectedPhoto.alt}
-          >
+          <Modal onClose={handleCloseModal} title={selectedPhoto.photographer} src={selectedPhoto.src} alt={selectedPhoto.alt}>
             <img src={selectedPhoto.src} alt={selectedPhoto.alt} />
           </Modal>
         )}
