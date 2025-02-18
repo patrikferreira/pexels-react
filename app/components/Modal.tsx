@@ -2,7 +2,6 @@
 import { ReactNode } from "react";
 import { IoIosClose } from "react-icons/io";
 import Button from "./Button";
-import { MdOutlineFileDownload } from "react-icons/md";
 import { TbPhotoSensor2 } from "react-icons/tb";
 import DownloadBtn from "./DownloadBtn";
 
@@ -20,10 +19,6 @@ export default function Modal({ onClose, title, children, className, src, alt }:
     if (e.target === e.currentTarget) {
       onClose();
     }
-  }
-
-  function download() {
-    alert("test");
   }
 
   return (
