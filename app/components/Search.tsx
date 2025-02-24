@@ -5,6 +5,7 @@ import { useContext, useState } from "react";
 import Button from "./Button";
 import Popover from "./Popover";
 import { AppContext } from "../store/AppContext";
+import { IoIosClose } from "react-icons/io";
 
 export default function Search() {
   const [query, setQuery] = useState<string>("");
@@ -15,6 +16,10 @@ export default function Search() {
     setSearchQuery(query);
     setQuery("");
     setIsPopoverOpen(false);
+  }
+
+  function closeSearch() {
+    alert("close")
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -64,6 +69,9 @@ export default function Search() {
                 onKeyDown={handleKeyDown}
                 className="flex-1 outline-none px-3 text-foreground bg-firstColor"
               />
+              <Button action={() => setIsPopoverOpen(prev => !prev)} className="px-3">
+                <IoIosClose className="text-3xl" />
+              </Button>
               <Button
                 action={handleSearch}
                 className="bg-accentColor hover:brightness-95 p-3 rounded-full text-xl"
