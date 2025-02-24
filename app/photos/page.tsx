@@ -86,7 +86,7 @@ export default function Photos() {
         {isLoading && photos.length === 0 ? (
           <LoadSpin />
         ) : (
-          <div className="columns-3 space-y-4 animate-fadeIn">
+          <div className="columns-1 sm:columns-2 md:columns-3 space-y-4 animate-fadeIn">
             {photos.map((photo) => (
               <div
                 key={photo.id}
