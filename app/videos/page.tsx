@@ -90,7 +90,7 @@ export default function Videos() {
         {isLoading && videos.length === 0 ? (
           <LoadSpin />
         ) : (
-          <div className="columns-3 space-y-4 animate-fadeIn">
+          <div className="columns-1 sm:columns-2 md:columns-3 space-y-4 animate-fadeIn">
             {videos.map((video, index) => (
               <div
                 key={`${video.id}-${index}`}
