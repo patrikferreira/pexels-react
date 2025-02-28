@@ -6,6 +6,7 @@ import LoadSpin from "../components/LoadSpin";
 import Image from "../components/Image";
 import Modal from "../components/Modal";
 import FixedContainer from "../components/FixedContainer";
+import ContentFilter from "../components/ContentFilter";
 
 export default function Photos() {
   const [photos, setPhotos] = useState<any[]>([]);
@@ -81,12 +82,14 @@ export default function Photos() {
   }
 
   return (
-    <div className="h-[calc(100%-92px)] pt-[92px]">
+    <div className="h-[calc(100%-78px)] pt-[78px] sm:h-[calc(100%-94px)] sm:pt-[94px]">
       <FixedContainer>
         {isLoading && photos.length === 0 ? (
           <LoadSpin />
         ) : (
-          <div className="columns-1 sm:columns-2 md:columns-3 space-y-4 animate-fadeIn">
+          <div className="flex flex-col gap-4">
+            <ContentFilter />
+            <div className="columns-1 sm:columns-2 md:columns-3 space-y-4 animate-fadeIn">
             {photos.map((photo) => (
               <div
                 key={photo.id}
@@ -95,6 +98,7 @@ export default function Photos() {
                 <Image src={photo.src?.large2x || photo.src?.original} alt={photo.alt} photographer={photo.photographer} />
               </div>
             ))}
+          </div>
           </div>
         )}
 

@@ -18,10 +18,6 @@ export default function Search() {
     setIsPopoverOpen(false);
   }
 
-  function closeSearch() {
-    alert("close")
-  }
-
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
       handleSearch();
@@ -31,7 +27,7 @@ export default function Search() {
   return (
     <div>
       {/* web */}
-      <div className="hidden md:flex p-2 rounded-full items-center bg-firstColor">
+      <div className="hidden sm:flex p-2 rounded-full items-center bg-firstColor">
         <Select />
         <input
           type="text"
@@ -43,17 +39,17 @@ export default function Search() {
         />
         <Button
           action={handleSearch}
-          className="bg-accentColor hover:brightness-95 hover:text-foreground transition-all duration-200 p-3 rounded-full text-xl"
+          className="bg-accentColor text-background hover:brightness-95 transition-all duration-200 p-3 rounded-full text-xl"
         >
           <IoSearchSharp />
         </Button>
       </div>
 
       {/* mobile */}
-      <div className="flex md:hidden">
+      <div className="flex sm:hidden">
         <Button
           action={() => setIsPopoverOpen(true)}
-          className="bg-accentColor hover:brightness-95 transition-all duration-200 p-3 rounded-full text-xl"
+          className="bg-accentColor text-background hover:brightness-95 transition-all duration-200 p-3 rounded-full text-xl"
         >
           <IoSearchSharp />
         </Button>
@@ -74,7 +70,7 @@ export default function Search() {
               </Button>
               <Button
                 action={handleSearch}
-                className="bg-accentColor hover:brightness-95 p-3 rounded-full text-xl"
+                className="bg-accentColor text-background hover:brightness-95 p-3 rounded-full text-xl"
               >
                 <IoSearchSharp />
               </Button>

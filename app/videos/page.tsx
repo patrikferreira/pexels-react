@@ -6,6 +6,7 @@ import LoadSpin from "../components/LoadSpin";
 import Video from "../components/Video";
 import Modal from "../components/Modal";
 import FixedContainer from "../components/FixedContainer";
+import ContentFilter from "../components/ContentFilter";
 
 export default function Videos() {
   const [videos, setVideos] = useState<any[]>([]);
@@ -36,7 +37,9 @@ export default function Videos() {
         setVideos((prevVideos) => {
           const newVideos = [...prevVideos, ...responseData.videos];
 
-          const uniqueVideos = Array.from(new Map(newVideos.map(video => [video.id, video])).values());
+          const uniqueVideos = Array.from(
+            new Map(newVideos.map((video) => [video.id, video])).values()
+          );
 
           return currentPage === 1 ? responseData.videos : uniqueVideos;
         });
@@ -85,29 +88,32 @@ export default function Videos() {
   }
 
   return (
-    <div className="h-[calc(100%-92px)] pt-[92px]">
+    <div className="h-[calc(100%-78px)] pt-[78px] sm:h-[calc(100%-94px)] sm:pt-[94px]">
       <FixedContainer>
         {isLoading && videos.length === 0 ? (
           <LoadSpin />
         ) : (
-          <div className="columns-1 sm:columns-2 md:columns-3 space-y-4 animate-fadeIn">
-            {videos.map((video, index) => (
-              <div
-                key={`${video.id}-${index}`}
-                onClick={() =>
-                  handleVideoClick(
-                    video.video_files?.[0]?.link,
-                    video.user?.name || "Unknown",
-                    video.alt
-                  )
-                }
-              >
-                <Video
-                  src={video.video_files?.[0]?.link}
-                  photographer={video.user?.name || "Unknown"}
-                />
-              </div>
-            ))}
+          <div className="flex flex-col gap-4">
+            <ContentFilter />
+            <div className="columns-1 sm:columns-2 md:columns-3 space-y-4 animate-fadeIn">
+              {videos.map((video, index) => (
+                <div
+                  key={`${video.id}-${index}`}
+                  onClick={() =>
+                    handleVideoClick(
+                      video.video_files?.[0]?.link,
+                      video.user?.name || "Unknown",
+                      video.alt
+                    )
+                  }
+                >
+                  <Video
+                    src={video.video_files?.[0]?.link}
+                    photographer={video.user?.name || "Unknown"}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
