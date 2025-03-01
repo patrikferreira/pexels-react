@@ -31,20 +31,6 @@ export default function Video({
     }
   }
 
-  function download() {
-    fetch(src)
-      .then((response) => response.blob())
-      .then((blob) => {
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = alt || "video";
-        link.click();
-      })
-      .catch((error) => {
-        console.error("Failed to download video:", error);
-      });
-  }
-
   return (
     <div className="h-min rounded-2xl overflow-hidden relative group cursor-pointer">
       <video

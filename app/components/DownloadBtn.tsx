@@ -9,17 +9,28 @@ type Props = {
 
 export default function DownloadBtn({ src, alt, className }: Props) {
   function downloadElement() {
-    fetch(src)
-      .then((response) => response.blob())
-      .then((blob) => {
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = alt || "item";
-        link.click();
-      })
-      .catch((error) => {
-        console.error("Failed to download item:", error);
-      });
+    const isVideo = src.endsWith(".mp4") || src.includes("video");
+
+    if (isVideo) {
+      const link = document.createElement("a");
+      link.href = src;
+      link.download = alt || "video.mp4";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      fetch(src)
+        .then((response) => response.blob())
+        .then((blob) => {
+          const link = document.createElement("a");
+          link.href = URL.createObjectURL(blob);
+          link.download = alt || "item";
+          link.click();
+        })
+        .catch((error) => {
+          console.error("Failed to download item:", error);
+        });
+    }
   }
 
   return (

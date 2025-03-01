@@ -14,20 +14,6 @@ export default function Image({
   photographer,
   className,
 }: Props) {
-  function download() {
-    fetch(src)
-      .then((response) => response.blob())
-      .then((blob) => {
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = alt || "image";
-        link.click();
-      })
-      .catch((error) => {
-        console.error("Failed to download image:", error);
-      });
-  }
-
   return (
     <div className="h-min rounded-2xl overflow-hidden relative group cursor-pointer">
       <img src={src} alt={alt} className={`w-full h-auto ${className}`} />
