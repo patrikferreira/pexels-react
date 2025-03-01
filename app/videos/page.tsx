@@ -93,27 +93,37 @@ export default function Videos() {
         {isLoading && videos.length === 0 ? (
           <LoadSpin />
         ) : (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 h-full">
             <ContentFilter />
-            <div className="columns-1 sm:columns-2 md:columns-3 space-y-4 animate-fadeIn">
-              {videos.map((video, index) => (
-                <div
-                  key={`${video.id}-${index}`}
-                  onClick={() =>
-                    handleVideoClick(
-                      video.video_files?.[0]?.link,
-                      video.user?.name || "Unknown",
-                      video.alt
-                    )
-                  }
-                >
-                  <Video
-                    src={video.video_files?.[0]?.link}
-                    photographer={video.user?.name || "Unknown"}
-                  />
+            {videos.length > 0 ? (
+              <div className="columns-1 sm:columns-2 md:columns-3 space-y-4 animate-fadeIn">
+                {videos.map((video, index) => (
+                  <div
+                    key={`${video.id}-${index}`}
+                    onClick={() =>
+                      handleVideoClick(
+                        video.video_files?.[0]?.link,
+                        video.user?.name || "Unknown",
+                        video.alt
+                      )
+                    }
+                  >
+                    <Video
+                      src={video.video_files?.[0]?.link}
+                      photographer={video.user?.name || "Unknown"}
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              !isLoading && (
+                <div className="flex items-center justify-center h-full">
+                  <p className="text-center text-lg">
+                    No videos found. Try another search.
+                  </p>
                 </div>
-              ))}
-            </div>
+              )
+            )}
           </div>
         )}
 

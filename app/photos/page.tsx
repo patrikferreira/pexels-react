@@ -29,11 +29,17 @@ export default function Photos() {
     async function fetchPhotos() {
       setIsLoading(true);
       try {
-        const responseData = await getData.getPhotos(currentPage, perPage, searchQuery);
+        const responseData = await getData.getPhotos(
+          currentPage,
+          perPage,
+          searchQuery
+        );
         setPhotos((prevPhotos) => {
           const newPhotos = [...prevPhotos, ...responseData.photos];
 
-          const uniquePhotos = Array.from(new Map(newPhotos.map(photo => [photo.id, photo])).values());
+          const uniquePhotos = Array.from(
+            new Map(newPhotos.map((photo) => [photo.id, photo])).values()
+          );
 
           return currentPage === 1 ? responseData.photos : uniquePhotos;
         });
@@ -87,25 +93,50 @@ export default function Photos() {
         {isLoading && photos.length === 0 ? (
           <LoadSpin />
         ) : (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 h-full">
             <ContentFilter />
-            <div className="columns-1 sm:columns-2 md:columns-3 space-y-4 animate-fadeIn">
-            {photos.map((photo) => (
-              <div
-                key={photo.id}
-                onClick={() => handlePhotoClick(photo.src?.large2x || photo.src?.original, photo.photographer, photo.alt)}
-              >
-                <Image src={photo.src?.large2x || photo.src?.original} alt={photo.alt} photographer={photo.photographer} />
+            {photos.length > 0 ? (
+              <div className="columns-1 sm:columns-2 md:columns-3 space-y-4 animate-fadeIn">
+                {photos.map((photo) => (
+                  <div
+                    key={photo.id}
+                    onClick={() =>
+                      handlePhotoClick(
+                        photo.src?.large2x || photo.src?.original,
+                        photo.photographer,
+                        photo.alt
+                      )
+                    }
+                  >
+                    <Image
+                      src={photo.src?.large2x || photo.src?.original}
+                      alt={photo.alt}
+                      photographer={photo.photographer}
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            ) : (
+              !isLoading && (
+                <div className="flex items-center justify-center h-full">
+                  <p className="text-center text-lg">
+                    No photos found. Try another search.
+                  </p>
+                </div>
+              )
+            )}
           </div>
         )}
 
         {isLoading && <LoadSpin />}
 
         {isModalOpen && selectedPhoto && (
-          <Modal onClose={handleCloseModal} title={selectedPhoto.photographer} src={selectedPhoto.src} alt={selectedPhoto.alt}>
+          <Modal
+            onClose={handleCloseModal}
+            title={selectedPhoto.photographer}
+            src={selectedPhoto.src}
+            alt={selectedPhoto.alt}
+          >
             <img src={selectedPhoto.src} alt={selectedPhoto.alt} />
           </Modal>
         )}
