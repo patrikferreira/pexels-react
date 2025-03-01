@@ -23,7 +23,7 @@ export default function Modal({ onClose, title, children, className, src, alt }:
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
+      className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4"
       onClick={handleBackdropClick}
     >
       <div

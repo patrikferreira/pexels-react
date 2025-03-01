@@ -1,13 +1,5 @@
-"use client"
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import App from "./App";
 
 export default function Home() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.push("/photos");
-  }, [router]);
-
-  return null;
+  return <App />;
 }
